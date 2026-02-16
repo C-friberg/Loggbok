@@ -9,7 +9,7 @@ namespace api.Models
     {
         public int Id {get; set;}
         public string Name { get; set; } = string.Empty; 
-        public string Category { get; set; } = string.Empty; 
+        public TodoCategory Category { get; set; }
         //Navigation
         public List<TodoItem> TodoItems {get; set;} = new(); 
     }
