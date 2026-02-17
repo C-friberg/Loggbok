@@ -38,24 +38,36 @@ namespace api.Repositories
             return itemModel;
         }
 
-        public Task<List<TodoItem>> GetAllAsync()
+        public async Task<List<TodoItem>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.TodoItems.ToListAsync();
         }
 
-        public Task<TodoItem?> GetByIdAsync(Guid id)
+        public async Task<TodoItem?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.TodoItems.FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public Task<bool> ItemExists(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.TodoItems.AnyAsync(i => i.Id == id);
         }
 
-        public Task<TodoItem?> UpdateAsync(Guid id, UpdateTodoItemRequestDto todoItemDto)
+        public async Task<TodoItem?> UpdateAsync(Guid id, UpdateTodoItemRequestDto todoItemDto)
         {
-            throw new NotImplementedException();
+            var existingItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
+            if (existingItem == null)
+            {
+                return null;
+            }
+
+            existingItem.Title = todoItemDto.Title;
+            existingItem.Description = todoItemDto.Description;
+            existingItem.IsCompleted = todoItemDto.IsCompleted;
+            existingItem.TodoListId = todoItemDto.TodoListId;
+
+            await _context.SaveChangesAsync();
+            return existingItem;
         }
     }
 }
