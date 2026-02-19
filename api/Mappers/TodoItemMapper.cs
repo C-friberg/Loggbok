@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace api.Dtos
 {
@@ -21,7 +22,19 @@ namespace api.Dtos
                 TodoListId = itemModel.TodoListId,
                 TodoList = itemModel.TodoList,
                 Comments = itemModel.Comments.Select(c => c.ToCommentDto()).ToList()
-            }; 
+            };
+        }
+
+        public static TodoItem ToItemFromCreateDto(this CreateItemRequestDto itemDto)
+        {
+            return new TodoItem
+            {
+                Title = itemDto.Title,
+                Description = itemDto.Description,
+                IsCompleted = itemDto.IsCompleted,
+                TodoListId = itemDto.TodoListId,
+                TodoList = itemDto.TodoList,
+            };
         }
 
 
