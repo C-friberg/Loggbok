@@ -60,5 +60,39 @@ namespace api.Controllers
             await _itemRepo.CreateAsync(itemModel);
             return CreatedAtAction(nameof(GetById), new { id = itemModel.Id }, itemModel.ToItemDto());
         }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTodoItemRequestDto updateDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var itemModel = await _itemRepo.UpdateAsync(id, updateDto);
+
+            if (itemModel == null)
+            {
+                return NotFound();
+            }
+            return Ok(itemModel.ToItemDto());
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var itemModel = await _itemRepo.DeleteAsync(id);
+            if (itemModel == null)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
     }
 }
